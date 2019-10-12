@@ -11,7 +11,7 @@ namespace gil = boost::gil;
 
 int main() {
     std::cout << "hello\n";
-    gil::gray8_image_t image;
+    gil::rgb8_image_t image;
     gil::read_image("input.png", image, gil::png_tag{});
     std::cout << image.dimensions().x << ' ' << image.dimensions().y << '\n';
 

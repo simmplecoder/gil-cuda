@@ -2,16 +2,13 @@ cmake_minimum_required(VERSION 3.10)
 project(cuda-gil)
 
 if(NOT DEFINED BOOST_ROOT AND NOT DEFINED ENV{BOOST_ROOT})
-    message(ERROR "Please set BOOST_ROOT to root of the boost library collection")
+    message(ERROR "Please set BOOST_ROOT")
 endif()
 
-add_library(boost_include INTERFACE)
-target_include_directories(boost_include INTERFACE 
-    "${BOOST_ROOT}"
-)
-
-add_library(filesystem SHARED IMPORTED)
-set_target_properties(filesystem PROPERTIES IMPORTED_LOCATION "${BOOST_ROOT}/stage/lib/libboost_filesystem.so.1.71")
+add_library(boost INTERFACE)
+set_target_properties(boost PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${BOOST_ROOT}"
+    INTERFACE_LINK_LIBRARIES "${BOOST_ROOT}/stage/lib/libboost_unit_test_framework.so;${BOOST_ROOT}/stage/lib/libboost_filesystem.so")
 
 if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
   message(STATUS "Boost.GIL: Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
@@ -26,14 +23,10 @@ target_link_libraries(io_dependencies INTERFACE
     CONAN_PKG::libjpeg
     CONAN_PKG::libpng
     CONAN_PKG::libtiff
-    filesystem     
 )
 
 add_executable(test_prog main.cpp)
 target_link_libraries(test_prog 
-    boost_include     
-    CONAN_PKG::libjpeg
-    CONAN_PKG::libpng
-    CONAN_PKG::libtiff
-    filesystem
+    io_dependencies
+    boost
 )
