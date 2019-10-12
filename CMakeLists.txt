@@ -10,8 +10,9 @@ set_target_properties(boost PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${BOOST_ROOT}"
     INTERFACE_LINK_LIBRARIES "${BOOST_ROOT}/stage/lib/libboost_unit_test_framework.so;${BOOST_ROOT}/stage/lib/libboost_filesystem.so")
 
+# taken from https://github.com/boostorg/gil/blob/develop/CMakeLists.txt
 if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
-  message(STATUS "Boost.GIL: Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+  message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
   file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/v0.14/conan.cmake"
     "${CMAKE_BINARY_DIR}/conan.cmake")
 endif()
