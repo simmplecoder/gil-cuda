@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(cuda-gil)
+project(cuda-gil LANGUAGES CXX CUDA)
 
 if(NOT DEFINED BOOST_ROOT AND NOT DEFINED ENV{BOOST_ROOT})
     message(ERROR "Please set BOOST_ROOT")
@@ -26,7 +26,8 @@ target_link_libraries(io_dependencies INTERFACE
     CONAN_PKG::libtiff
 )
 
-add_executable(test_prog main.cpp)
+add_executable(test_prog main.cu)
+set_property(TARGET test_prog PROPERTY CUDA_SEPARABLE_COMPILATION ON)
 target_link_libraries(test_prog 
     io_dependencies
     boost
